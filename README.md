@@ -15,7 +15,14 @@ yarn add web-amr
 
 # Using pnpm
 pnpm add web-amr
+
+# Install from GitHub (for forked versions)
+npm install "github:username/web-amr"
 ```
+
+## TypeScript Support
+
+This package includes TypeScript definitions. For Angular projects or when using a forked version from GitHub, you may need to add the included `web-amr.d.ts` file to your project's type definitions.
 
 ## Usage
 

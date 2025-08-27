@@ -2,7 +2,16 @@
 	"name": "web-amr",
 	"version": "0.0.6",
 	"description": " AMR Player for the web",
-	"main": "dist",
+	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
 	"files": [
 		"dist"
 	],
@@ -11,7 +20,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:navana-tech/web-amr"
+		"url": "git@github.com:tharm443/web-amr"
 	},
 	"keywords": [
 		"amr",

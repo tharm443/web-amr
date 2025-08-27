@@ -15,18 +15,18 @@ const MEDIA_ERR_NETWORK = 2;
 const MEDIA_ERR_DECODE = 3;
 const MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
 
-const decodeError = () =>
+const decodeError = (): Player =>
 	Object.assign(new EventTarget(), {
 		duration: NaN,
 		currentTime: NaN,
 		error: {
 			message: "Could not decode AMR audio",
-			code: MEDIA_ERR_DECODE,
-			MEDIA_ERR_ABORTED,
-			MEDIA_ERR_NETWORK,
-			MEDIA_ERR_DECODE,
-			MEDIA_ERR_SRC_NOT_SUPPORTED,
-		},
+			code: MEDIA_ERR_DECODE as 3,
+			MEDIA_ERR_ABORTED: MEDIA_ERR_ABORTED as 1,
+			MEDIA_ERR_NETWORK: MEDIA_ERR_NETWORK as 2,
+			MEDIA_ERR_DECODE: MEDIA_ERR_DECODE as 3,
+			MEDIA_ERR_SRC_NOT_SUPPORTED: MEDIA_ERR_SRC_NOT_SUPPORTED as 4,
+		} as MediaError,
 		play() {
 			throw new Error("Player has errored.");
 		},
@@ -46,7 +46,7 @@ const decodeError = () =>
 
 export const AMRPlayer = (
 	file: ArrayBuffer,
-	{ onEnd = () => {} }: { onEnd?: () => void } = {},
+	{ onEnd = () => { } }: { onEnd?: () => void } = {},
 ): Player => {
 	const buf = new Uint8Array(file);
 
