@@ -113,13 +113,24 @@ export const AMR = (function () {
             Module["printErr"] = function printErr(x) {
                 process["stderr"].write(x + "\n");
             };
-        var nodeFS = require("fs");
-        var nodePath = require("path");
+        var nodeFS, nodePath;
+        try {
+            nodeFS = eval('require')("fs");
+            nodePath = eval('require')("path");
+        }
+        catch (e) {
+            // Fallback for browser environments
+            nodeFS = null;
+            nodePath = null;
+        }
         Module["read"] = function read(filename, binary) {
+            if (!nodeFS || !nodePath) {
+                throw new Error("File system not available in browser environment");
+            }
             filename = nodePath["normalize"](filename);
             var ret = nodeFS["readFileSync"](filename);
             if (!ret && filename != nodePath["resolve"](filename)) {
-                filename = path.join(__dirname, "..", "src", filename);
+                filename = nodePath.join(__dirname, "..", "src", filename);
                 ret = nodeFS["readFileSync"](filename);
             }
             if (ret && !binary)
@@ -36110,7 +36121,12 @@ export const AMR = (function () {
             }
             else if (ENVIRONMENT_IS_NODE) {
                 random_device = function () {
-                    return require("crypto").randomBytes(1)[0];
+                    try {
+                        return eval('require')("crypto").randomBytes(1)[0];
+                    }
+                    catch (e) {
+                        return (Math.random() * 256) | 0;
+                    }
                 };
             }
             else {
@@ -37734,9 +37750,19 @@ export const AMR = (function () {
         TTY.shutdown();
     });
     if (ENVIRONMENT_IS_NODE) {
-        var fs = require("fs");
-        var NODEJS_PATH = require("path");
-        NODEFS.staticInit();
+        var fs, NODEJS_PATH;
+        try {
+            fs = eval('require')("fs");
+            NODEJS_PATH = eval('require')("path");
+        }
+        catch (e) {
+            // Fallback for browser environments
+            fs = null;
+            NODEJS_PATH = null;
+        }
+        if (fs && NODEJS_PATH) {
+            NODEFS.staticInit();
+        }
     }
     STACK_BASE = STACKTOP = Runtime.alignMemory(STATICTOP);
     staticSealed = true;
